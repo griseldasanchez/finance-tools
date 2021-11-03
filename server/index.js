@@ -7,6 +7,8 @@ app.use(express.static(__dirname + '/../client/dist'));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+const db = require('../database/connect.js');
+
 app.get('/', (req, res) => {
   res.send('Hello from server!')
 });
