@@ -24,22 +24,21 @@ app.get('/loans', (req, res) => {
 
 // Add New Loan
 app.post('/loans', (req, res) => {
-  console.log('body', req.body)
   let provider = req.body.provider;
   let term = req.body.term;
   let principal = req.body.principal;
   let interest = req.body.interest;
   let monthlyPayment = req.body.monthlyPayment;
+  let paymentDate = req.body.paymentDate;
   db.client.query(`
-      INSERT INTO loans (provider,principal,interest,monthlyPayment,term) 
-      VALUES('${provider}', ${principal}, ${interest}, ${monthlyPayment}, ${term})` 
+      INSERT INTO loans (provider,principal,interest,monthlyPayment,term,paymentDate) 
+      VALUES('${provider}', ${principal}, ${interest}, ${monthlyPayment}, ${term}, ${paymentDate})` 
     , (err, data) => {
     if (err) {
       // console.log('error in post /loans');
       res.send(err);
     } else {
-      console.log('data in post /loans', data.rows);
-      console.log('info', data);
+      // console.log('data in post /loans', data.rows);
       res.send(data.rows);
     }
   })
