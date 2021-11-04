@@ -10,7 +10,8 @@ CREATE TABLE Loans (
   provider        VARCHAR   NOT NULL,
   principal       DECIMAL   NOT NULL,
   interest        DECIMAL   NOT NULL,
-  monthlyPayment  DECIMAL   NOT NULL
+  monthlyPayment  DECIMAL   NOT NULL,
+  term            DECIMAL   NOT NULL
 );
 
-\COPY Loans(provider,principal,interest,monthlyPayment) FROM './data/loans.csv' DELIMITER ',' CSV HEADER;
+\COPY Loans(provider,principal,interest,monthlyPayment,term) FROM './data/loans.csv' DELIMITER ',' CSV HEADER;

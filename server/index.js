@@ -9,8 +9,16 @@ app.use(express.urlencoded({ extended: true }))
 
 const db = require('../database/connect.js');
 
-app.get('/', (req, res) => {
-  res.send('Hello from server!')
+app.get('/loans', (req, res) => {
+  db.client.query(`SELECT * FROM loans` , (err, data) => {
+    if (err) {
+      // console.log('error in /loans');
+      res.send(err);
+    } else {
+      console.log('data in /loans', data.rows);
+      res.send(data.rows);
+    }
+  })
 });
 
 app.listen(port, () => {
