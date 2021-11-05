@@ -46,6 +46,7 @@ function Loans() {
             <th className="loans-table-cell">Provider</th>
             <th className="loans-table-cell">Term in Years</th>
             <th className="loans-table-cell">Principal</th>
+            <th className="loans-table-cell">Remaining Balance</th>
             <th className="loans-table-cell">Interest</th>
             <th className="loans-table-cell">Monthly Payment</th>
             <th className="loans-table-cell">Payment Date</th>
@@ -58,6 +59,7 @@ function Loans() {
               <td className="loans-table-cell">{loan.provider}</td>
               <td className="loans-table-cell">{loan.term} years</td>
               <td className="loans-table-cell">${loan.principal}</td>
+              <td className="loans-table-cell">${loan.remainingbalance}</td>
               <td className="loans-table-cell">{loan.interest}%</td>
               <td className="loans-table-cell">${loan.monthlypayment}</td>
               <td className="loans-table-cell">{loan.paymentdate}th</td>
