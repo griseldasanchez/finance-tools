@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-
 function Loans() {
 
   const [loans, setLoans] = useState([]);
   const [provider, setProvider] = useState('');
   const [term, setTerm] = useState(0);
   const [principal, setPrincipal] = useState(0);
+  const [remainingBalance, setRemainingBalance] = useState(0);
   const [interest, setInterest] = useState(0);
   const [monthlyPayment, setMonthlyPayment] = useState(0);
   const [paymentDate, setPaymentDate] = useState(0);
@@ -27,6 +27,7 @@ function Loans() {
         'provider': provider,
         'term': term,
         'principal': principal,
+        'remainingBalance': remainingBalance,
         'interest': interest,
         'monthlyPayment': monthlyPayment,
         'paymentDate': paymentDate
@@ -41,6 +42,7 @@ function Loans() {
     <div>
       <form>
         <table className="loans-table">
+          {/* table header */}
           <thead>
             <th className="loans-table-cell">ID#</th>
             <th className="loans-table-cell">Provider</th>
@@ -53,13 +55,14 @@ function Loans() {
             <th className="loans-table-cell">Daily Interest</th>
             <th className="loans-table-cell">Accrued Interest This Month</th>
           </thead>
+          {/* display table data */}
           {loans.map((loan, index) => (
             <tbody key={index}>
               <td className="loans-table-cell">{loan.loanid}</td>
               <td className="loans-table-cell">{loan.provider}</td>
               <td className="loans-table-cell">{loan.term} years</td>
               <td className="loans-table-cell">${loan.principal}</td>
-              <td className="loans-table-cell">${loan.remainingbalance}</td>
+              <td className="loans-table-cell">${loan.remainingBalance}</td>
               <td className="loans-table-cell">{loan.interest}%</td>
               <td className="loans-table-cell">${loan.monthlypayment}</td>
               <td className="loans-table-cell">{loan.paymentdate}th</td>
@@ -67,10 +70,12 @@ function Loans() {
               <td className="loans-table-cell">TBD</td>
             </tbody>
           ))} 
+          {/* display table form */}
             <td className="loans-table-cell">_</td>
             <td className="loans-table-cell"><input required onChange={(event) => setProvider(event.target.value)}></input></td>
             <td className="loans-table-cell"><input required onChange={(event) => setTerm(event.target.value)}></input></td>
             <td className="loans-table-cell"><input required onChange={(event) => setPrincipal(event.target.value)}></input></td>
+            <td className="loans-table-cell"><input required onChange={(event) => setRemainingBalance(event.target.value)}></input></td>
             <td className="loans-table-cell"><input required onChange={(event) => setInterest(event.target.value)}></input></td>
             <td className="loans-table-cell"><input required onChange={(event) => setMonthlyPayment(event.target.value)}></input></td>
             <td className="loans-table-cell"><input required onChange={(event) => setPaymentDate(event.target.value)}></input></td>

@@ -9,7 +9,7 @@ CREATE TABLE Loans (
   loanid            SERIAL    UNIQUE    PRIMARY KEY,
   provider          VARCHAR   NOT NULL,
   principal         DECIMAL   NOT NULL,
-  remainingBalance  DECIMAL NOT NULL,
+  remainingBalance  DECIMAL   NOT NULL,
   interest          DECIMAL   NOT NULL,
   monthlyPayment    DECIMAL   NOT NULL,
   term              DECIMAL   NOT NULL,
