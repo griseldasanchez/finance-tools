@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 
 function Loans() {
@@ -12,15 +12,14 @@ function Loans() {
   const [provider, setProvider] = useState('');
   const [remainingBalance, setRemainingBalance] = useState(0);
   const [term, setTerm] = useState(0);
+  const form = useRef(null);
 
   useEffect(() => {
-    axios.get('/loans')
-      .then(response => setLoans(response.data))
-      .catch(err => err)
+    getUpdatedLoanDetails();
   }, [])
 
   const getUpdatedLoanDetails = () => {
-    // rerender loan table to include new loan
+    // render loan table to include updates
     axios.get('/loans')
       .then(response => setLoans(response.data))
       .catch(err => err)
@@ -49,7 +48,8 @@ function Loans() {
   const resetForm = () => {
     // reset variables for form to blank after submission
     console.log('in reset');
-    setProvider('new ');
+    // setProvider('new ');
+    form.current.reset();
   }
 
   const deleteRow = (idToDelete) => {
@@ -60,12 +60,11 @@ function Loans() {
 
   return (
     <div>
-      <form>
+      <form ref={form}>
         <table className="loans-table">
           {/* table header */}
           <tbody>
             <tr>
-              <th className="loans-table-cell">ID#</th>
               <th className="loans-table-cell">Provider *</th>
               <th className="loans-table-cell">Term in Years *</th>
               <th className="loans-table-cell">Principal *</th>
@@ -82,7 +81,6 @@ function Loans() {
           {loans.map((loan, index) => (
             <tbody key={index}>
               <tr>
-                <td className="loans-table-cell">{loan.loanid}</td>
                 <td className="loans-table-cell">{loan.provider}</td>
                 <td className="loans-table-cell">{loan.term} years</td>
                 <td className="loans-table-cell">${loan.principal}</td>
@@ -101,7 +99,6 @@ function Loans() {
           {/* display table form */}
           <tbody>
             <tr>
-              <td className="loans-table-cell">_</td>
               <td className="loans-table-cell"><input onChange={(event) => setProvider(event.target.value)}></input></td>
               <td className="loans-table-cell"><input onChange={(event) => setTerm(event.target.value)}></input></td>
               <td className="loans-table-cell"><input onChange={(event) => setPrincipal(event.target.value)}></input></td>
@@ -112,7 +109,7 @@ function Loans() {
             </tr>
           </tbody>
         </table>
-          <button onClick={saveLoan}>Save Loan</button>
+          <button onClick={saveLoan} type="submit">Save Loan</button>
       </form>
     </div>
   );
