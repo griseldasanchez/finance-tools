@@ -9,6 +9,6 @@ body {
   text-align: left;
 }
 
-.loans-table-cell {
-  border: 1px black solid
+.loans-table-cell input {
+  width: 5rem;
 }

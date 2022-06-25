@@ -24,13 +24,13 @@ app.get('/loans', (req, res) => {
 
 // Add New Loan
 app.post('/loans', (req, res) => {
-  let provider = req.body.provider;
-  let term = req.body.term;
-  let principal = req.body.principal;
-  let remainingBalance = req.body.remainingBalance;
   let interest = req.body.interest;
   let monthlyPayment = req.body.monthlyPayment;
   let paymentDate = req.body.paymentDate;
+  let principal = req.body.principal;
+  let provider = req.body.provider;
+  let remainingBalance = req.body.remainingBalance;
+  let term = req.body.term;
   db.client.query(`
       INSERT INTO loans (provider,principal,interest,monthlyPayment,term,paymentDate,remainingBalance) 
       VALUES('${provider}', ${principal}, ${interest}, ${monthlyPayment}, ${term}, ${paymentDate}, ${remainingBalance})` 
@@ -44,6 +44,21 @@ app.post('/loans', (req, res) => {
     }
   })
 });
+
+app.delete('/loans/:id' , (req, res) => {
+  console.log('in delete server req id', req.params);
+  db.client.query(`
+    DELETE FROM loans
+    WHERE loanid = ${req.params.id}`
+    , (err, data) => {
+    if (err) {
+      res.send(err);
+    } else {
+      // console.log('data in post /loans', data.rows);
+      res.send(data.rows);
+    }
+  })
+})
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
