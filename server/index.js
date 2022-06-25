@@ -1,3 +1,4 @@
+const { default: axios } = require('axios');
 const express = require('express');
 const app = express();
 const port = 5000;
@@ -9,6 +10,8 @@ app.use(express.urlencoded({ extended: true }))
 
 const db = require('../database/connect.js');
 
+
+////////////////////////////////***** GET *****////////////////////////////////
 // Display Loan Records
 app.get('/loans', (req, res) => {
   db.client.query(`SELECT * FROM loans` , (err, data) => {
@@ -19,9 +22,10 @@ app.get('/loans', (req, res) => {
       // console.log('data in get /loans', data.rows);
       res.send(data.rows);
     }
-  })
+  });
 });
 
+////////////////////////////////***** POST *****////////////////////////////////
 // Add New Loan
 app.post('/loans', (req, res) => {
   let interest = req.body.interest;
@@ -42,11 +46,11 @@ app.post('/loans', (req, res) => {
       // console.log('data in post /loans', data.rows);
       res.send(data.rows);
     }
-  })
+  });
 });
 
+////////////////////////////////***** DELETE *****////////////////////////////////
 app.delete('/loans/:id' , (req, res) => {
-  console.log('in delete server req id', req.params);
   db.client.query(`
     DELETE FROM loans
     WHERE loanid = ${req.params.id}`
@@ -54,11 +58,25 @@ app.delete('/loans/:id' , (req, res) => {
     if (err) {
       res.send(err);
     } else {
-      // console.log('data in post /loans', data.rows);
       res.send(data.rows);
     }
-  })
-})
+  });
+});
+
+////////////////////////////////***** PUT *****////////////////////////////////
+app.put('/loans', (req, res) => {
+  console.log('in put', req.body);
+  // db.client.query(`
+  //   DELETE FROM loans
+  //   WHERE loanid = ${req.params.id}`
+  //   , (err, data) => {
+  //   if (err) {
+  //     res.send(err);
+  //   } else {
+  //     res.send(data.rows);
+  //   }
+  // })
+});
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)

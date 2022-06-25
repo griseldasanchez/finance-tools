@@ -14,10 +14,10 @@ body {
 }
 
 .loans-table-cell {
-  width: 5rem;
+  width: 6rem;
   border: 1px black solid;
 }
 
 .loans-table-cell input {
-  width: 5rem;
+  width: 6rem;
 }

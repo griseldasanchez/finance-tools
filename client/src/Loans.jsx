@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
+import ReactDOM from 'react-dom';
+import Modal from 'react-modal';
+
 
 function Loans() {
 
@@ -12,12 +15,41 @@ function Loans() {
   const [provider, setProvider] = useState('');
   const [remainingBalance, setRemainingBalance] = useState(0);
   const [term, setTerm] = useState(0);
+  // clear form fields after new loan submission
   const form = useRef(null);
+  // modal variables
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+    // loan details in modal being edited
+    const [interestModal, setInterestModal] = useState(0);
+    const [monthlyPaymentModal, setMonthlyPaymentModal] = useState(0);
+    const [paymentDateModal, setPaymentDateModal] = useState(0);
+    const [principalModal, setPrincipalModal] = useState(0);
+    const [providerModal, setProviderModal] = useState('');
+    const [remainingBalanceModal, setRemainingBalanceModal] = useState(0);
+    const [termModal, setTermModal] = useState(0);
+
+
+  const openModal = (loanName) => {
+    event.preventDefault();
+    setIsOpen(true);
+    setProviderModal(loanName);
+    console.log('loan ' , loanName);
+  }
+
+  const afterOpenModal = () => {
+    // references are now sync'd and can be accessed.
+    // subtitle.style.color = '#f00';
+  }
+
+  const closeModal = () => {
+    setIsOpen(false);
+  }
+
 
   useEffect(() => {
     getUpdatedLoanDetails();
   }, [])
-
+  
   const getUpdatedLoanDetails = () => {
     // render loan table to include updates
     axios.get('/loans')
@@ -57,6 +89,13 @@ function Loans() {
     axios.delete(`/loans/${idToDelete}`, { data: idToDelete })
     getUpdatedLoanDetails();
   }
+  
+  const editRow = (idToEdit) => {
+    event.preventDefault();
+    console.log('calling edit', idToEdit);
+    // axios.put(`/loans`, { data: idToEdit })
+    getUpdatedLoanDetails();
+  }
 
   return (
     <div>
@@ -75,6 +114,7 @@ function Loans() {
               <th className="loans-table-cell">Daily Interest</th>
               <th className="loans-table-cell">Accrued Interest This Month</th>
               <th className="loans-table-cell">Delete</th>
+              <th className="loans-table-cell">Edit Row</th>
             </tr>
           </tbody>
           {/* display table data */}
@@ -84,7 +124,7 @@ function Loans() {
                 <td className="loans-table-cell">{loan.provider}</td>
                 <td className="loans-table-cell">{loan.term} years</td>
                 <td className="loans-table-cell">${loan.principal}</td>
-                <td className="loans-table-cell">${loan.remainingBalance}</td>
+                <td className="loans-table-cell">${loan.remainingbalance}</td>
                 <td className="loans-table-cell">{loan.interest}%</td>
                 <td className="loans-table-cell">${loan.monthlypayment}</td>
                 <td className="loans-table-cell">{loan.paymentdate}th</td>
@@ -93,6 +133,27 @@ function Loans() {
                 <td className="loans-table-cell">
                   <button onClick={() => deleteRow(loan.loanid)}>Delete</button>
                 </td>
+                {/* <td className="loans-table-cell">
+                  <button onC
+                  lick={() => editRow(loan.loanid)}>Edit</button>
+                </td> */}
+                <td className="loans-table-cell">
+                  <button onClick={() => openModal(loan.provider)}>Edit Loan</button>
+                    <Modal
+                      isOpen={modalIsOpen}
+                      onAfterOpen={afterOpenModal}
+                      onRequestClose={closeModal}
+                    >
+                      <h2>Edit {providerModal} Loan: </h2>
+                      <button onClick={closeModal}>close</button>
+                      <form>
+                        <input />
+                        <button>tab navigation</button>
+                      </form>
+                    </Modal>
+                  </td>
+
+
               </tr>
             </tbody>
           ))} 
