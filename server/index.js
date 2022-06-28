@@ -66,16 +66,22 @@ app.delete('/loans/:id' , (req, res) => {
 ////////////////////////////////***** PUT *****////////////////////////////////
 app.put('/loans', (req, res) => {
   console.log('in put', req.body);
-  // db.client.query(`
-  //   DELETE FROM loans
-  //   WHERE loanid = ${req.params.id}`
-  //   , (err, data) => {
-  //   if (err) {
-  //     res.send(err);
-  //   } else {
-  //     res.send(data.rows);
-  //   }
-  // })
+  var loanId = req.body.loanId;
+  var remainingBalance = Number(req.body.remainingBalance);
+  console.log(loanId, remainingBalance);
+  db.client.query(`
+    UPDATE loans
+    SET remainingBalance = ${remainingBalance}
+    WHERE loanid = ${loanId}`
+    , (err, data) => {
+    if (err) {
+      console.log('err', err);
+      res.send(err);
+    } else {
+      console.log('data', data.rows);
+      res.send(data.rows);
+    }
+  });
 });
 
 app.listen(port, () => {

@@ -20,6 +20,7 @@ function Loans() {
   // modal variables
   const [modalIsOpen, setIsOpen] = React.useState(false);
     // loan details in modal being edited
+    const [loanId, setLoanId] = useState(0);
     const [interestModal, setInterestModal] = useState(0);
     const [monthlyPaymentModal, setMonthlyPaymentModal] = useState(0);
     const [paymentDateModal, setPaymentDateModal] = useState(0);
@@ -29,11 +30,13 @@ function Loans() {
     const [termModal, setTermModal] = useState(0);
 
 
-  const openModal = (loanName) => {
+  const openModal = (loanId, loanName, loanRemainingBalance) => {
     event.preventDefault();
+    console.log('loanId', loanId);
     setIsOpen(true);
+    setLoanId(loanId);
     setProviderModal(loanName);
-    console.log('loan ' , loanName);
+    setRemainingBalanceModal(loanRemainingBalance);
   }
 
   const afterOpenModal = () => {
@@ -79,8 +82,6 @@ function Loans() {
 
   const resetForm = () => {
     // reset variables for form to blank after submission
-    console.log('in reset');
-    // setProvider('new ');
     form.current.reset();
   }
 
@@ -90,10 +91,9 @@ function Loans() {
     getUpdatedLoanDetails();
   }
   
-  const editRow = (idToEdit) => {
+  const editRow = (remainingBalance) => {
     event.preventDefault();
-    console.log('calling edit', idToEdit);
-    // axios.put(`/loans`, { data: idToEdit })
+    axios.put(`/loans`, { loanId: loanId, remainingBalance: remainingBalance })
     getUpdatedLoanDetails();
   }
 
@@ -133,27 +133,24 @@ function Loans() {
                 <td className="loans-table-cell">
                   <button onClick={() => deleteRow(loan.loanid)}>Delete</button>
                 </td>
-                {/* <td className="loans-table-cell">
-                  <button onC
-                  lick={() => editRow(loan.loanid)}>Edit</button>
-                </td> */}
                 <td className="loans-table-cell">
-                  <button onClick={() => openModal(loan.provider)}>Edit Loan</button>
+                  <button onClick={() => openModal(loan.loanid, loan.provider, loan.remainingbalance)}>Edit Loan</button>
                     <Modal
                       isOpen={modalIsOpen}
                       onAfterOpen={afterOpenModal}
                       onRequestClose={closeModal}
                     >
-                      <h2>Edit {providerModal} Loan: </h2>
                       <button onClick={closeModal}>close</button>
+                      <h2>Edit {providerModal} Loan: </h2>
                       <form>
-                        <input />
-                        <button>tab navigation</button>
+                        Remaing Balance: 
+                          <input  value={remainingBalanceModal} 
+                                  onChange={(event) => setRemainingBalanceModal(event.target.value)}>
+                          </input>
+                        <button onClick={() => editRow(remainingBalanceModal)}>Update Loan Details</button>
                       </form>
                     </Modal>
                   </td>
-
-
               </tr>
             </tbody>
           ))} 
